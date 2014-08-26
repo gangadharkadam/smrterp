@@ -10,6 +10,10 @@ from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from erpnext.controllers.selling_controller import SellingController
 
+form_grid_templates = {
+	"sales_order_details": "templates/form_grid/item_grid.html"
+}
+
 class SalesOrder(SellingController):
 	tname = 'Sales Order Item'
 	fname = 'sales_order_details'
@@ -148,6 +152,8 @@ class SalesOrder(SellingController):
 				doc.set_status(update=True)
 
 	def on_submit(self):
+
+
 		self.update_stock_ledger(update_stock = 1)
 
 		self.check_credit(self.grand_total)
@@ -157,6 +163,37 @@ class SalesOrder(SellingController):
 		self.update_prevdoc_status('submit')
 		frappe.db.set(self, 'status', 'Submitted')
 		
+
+		# """for email send""" 
+		# self.send_email()
+
+
+
+
+	def send_email(self):
+		
+		from frappe.utils.user import get_user_fullname
+		# # from frappe.utils import get_url
+		# # mail_titles = frappe.get_hooks().get("login_mail_title", [])
+		# title = frappe.db.get_default('company') or (mail_titles and mail_titles[0]) or ""
+
+		# full_name = get_user_fullname(frappe.session['user'])
+		# if full_name == "Guest":
+		# 	full_name = "Administrator"
+		email=frappe.db.sql("""select email_id from `tabAddress` where customer='%s'"""%(self.customer),as_list=1)
+		frappe.errprint(email[0][0])
+
+
+		message = frappe.db.sql_list("""select message from `tabTemplate Types`
+		where event_type='Sales Order Submit'""")
+		frappe.errprint(message[0])
+		# frappe.errprint(message[0].format(self.first_name or self.last_name or "user",link,self.name,full_name))
+
+		sender = frappe.session.user not in STANDARD_USERS and frappe.session.user or None
+		frappe.sendmail(recipients=email[0][0], sender=sender, subject='Get your business online with TailorPad',
+			message=message[0].format(self.customer,self.name,self.transaction_date,self.grand_total))
+
+		# frappe.throw(_("""Approval Status must be 'Approved' or 'Rejected'"""))	
 
 	def on_cancel(self):
 		# Cannot cancel stopped SO

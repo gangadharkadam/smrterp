@@ -8,7 +8,11 @@ from erpnext.utilities.transaction_base import TransactionBase
 from frappe.utils import now, extract_email_id
 import json
 import requests
+
 from frappe.utils import get_url
+
+
+STANDARD_USERS = ("Guest", "Administrator")
 
 class SupportTicket(TransactionBase):
 

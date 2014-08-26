@@ -12,6 +12,11 @@ from frappe import _
 from frappe.model.mapper import get_mapped_doc
 
 from erpnext.controllers.buying_controller import BuyingController
+
+form_grid_templates = {
+	"indent_details": "templates/form_grid/material_request_grid.html"
+}
+
 class MaterialRequest(BuyingController):
 	tname = 'Material Request Item'
 	fname = 'indent_details'
@@ -282,15 +287,18 @@ def make_purchase_order_based_on_supplier(source_name, target_doc=None):
 def get_material_requests_based_on_supplier(supplier):
 	supplier_items = [d[0] for d in frappe.db.get_values("Item",
 		{"default_supplier": supplier})]
-	material_requests = frappe.db.sql_list("""select distinct mr.name
-		from `tabMaterial Request` mr, `tabMaterial Request Item` mr_item
-		where mr.name = mr_item.parent
-		and mr_item.item_code in (%s)
-		and mr.material_request_type = 'Purchase'
-		and ifnull(mr.per_ordered, 0) < 99.99
-		and mr.docstatus = 1
-		and mr.status != 'Stopped'""" % ', '.join(['%s']*len(supplier_items)),
-		tuple(supplier_items))
+	if supplier_items:
+		material_requests = frappe.db.sql_list("""select distinct mr.name
+			from `tabMaterial Request` mr, `tabMaterial Request Item` mr_item
+			where mr.name = mr_item.parent
+			and mr_item.item_code in (%s)
+			and mr.material_request_type = 'Purchase'
+			and ifnull(mr.per_ordered, 0) < 99.99
+			and mr.docstatus = 1
+			and mr.status != 'Stopped'""" % ', '.join(['%s']*len(supplier_items)),
+			tuple(supplier_items))
+	else:
+		material_requests = []
 	return material_requests, supplier_items
 
 @frappe.whitelist()

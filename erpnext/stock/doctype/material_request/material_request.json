@@ -1,6 +1,5 @@
 {
- "allow_attach": 1, 
- "allow_import": 1, 
+  "allow_import": 1, 
  "autoname": "naming_series:", 
  "creation": "2013-03-07 14:48:38", 
  "docstatus": 0, 
@@ -87,6 +86,12 @@
    "oldfieldname": "indent_details", 
    "oldfieldtype": "Table", 
    "options": "Material Request Item", 
+   "permlevel": 0
+  }, 
+  {
+   "fieldname": "view_details", 
+   "fieldtype": "Fold", 
+   "label": "View Details", 
    "permlevel": 0
   }, 
   {
@@ -230,7 +235,7 @@
  "icon": "icon-ticket", 
  "idx": 1, 
  "is_submittable": 1, 
- "modified": "2014-06-23 07:55:49.393708", 
+ "modified": "2014-08-11 07:11:55.802625", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Material Request", 

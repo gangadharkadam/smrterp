@@ -1,6 +1,5 @@
 {
- "allow_attach": 1, 
- "autoname": "naming_series:", 
+  "autoname": "naming_series:", 
  "creation": "2013-05-24 19:29:09", 
  "docstatus": 0, 
  "doctype": "DocType", 
@@ -573,6 +572,11 @@
    "width": "150px"
   }, 
   {
+   "fieldname": "fold", 
+   "fieldtype": "Fold", 
+   "permlevel": 0
+  }, 
+  {
    "fieldname": "terms_section_break", 
    "fieldtype": "Section Break", 
    "label": "Terms and Conditions", 
@@ -1009,7 +1013,7 @@
  "idx": 1, 
  "in_create": 0, 
  "is_submittable": 1, 
- "modified": "2014-07-31 06:34:59.028308", 
+ "modified": "2014-08-12 05:23:55.104153", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Delivery Note", 
