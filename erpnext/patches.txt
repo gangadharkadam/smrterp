@@ -1,6 +1,5 @@
 execute:import unidecode # new requirement
 
-erpnext.patches.v4_0.validate_v3_patch
 erpnext.patches.v4_0.fix_employee_user_id
 erpnext.patches.v4_0.remove_employee_role_if_no_employee
 erpnext.patches.v4_0.update_user_properties
@@ -77,4 +76,3 @@ erpnext.patches.v4_2.fix_account_master_type
 erpnext.patches.v4_2.update_project_milestones
 erpnext.patches.v4_2.add_currency_turkish_lira #2014-08-08
 execute:frappe.delete_doc("DocType", "Landed Cost Wizard")
-erpnext.patches.v4_2.default_website_style
