@@ -227,6 +227,7 @@ def validate_validity(doc, method):
 		else:
 	 			frappe.throw(_("Your User Creation limit is expired . Please contact administrator"))
 
+
 def update_user_permissions(doc, method):
 	# called via User hook
 	if "Employee" in [d.role for d in doc.get("user_roles")]:
@@ -238,3 +239,4 @@ def update_users(doc, method):
 		abc=frappe.db.sql("""select name from `tabUser` where name=%s and enabled=1""", doc.name)
 		if abc:
 			frappe.db.sql("""update `tabSupport Ticket` set assign_to='Administrator' where assign_to=%s""",doc.name)
+
