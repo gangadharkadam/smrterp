@@ -1,6 +1,5 @@
 {
- "allow_attach": 1, 
- "allow_import": 1, 
+  "allow_import": 1, 
  "autoname": "naming_series:", 
  "creation": "2013-05-24 19:29:05", 
  "default_print_format": "Standard", 
@@ -715,6 +714,11 @@
    "read_only": 0
   }, 
   {
+   "fieldname": "fold", 
+   "fieldtype": "Fold", 
+   "permlevel": 0
+  }, 
+  {
    "fieldname": "terms_section_break", 
    "fieldtype": "Section Break", 
    "label": "Terms and Conditions", 
@@ -1188,7 +1192,7 @@
  "icon": "icon-file-text", 
  "idx": 1, 
  "is_submittable": 1, 
- "modified": "2014-07-31 06:34:41.295337", 
+ "modified": "2014-08-14 02:13:09.673510", 
  "modified_by": "Administrator", 
  "module": "Accounts", 
  "name": "Sales Invoice", 

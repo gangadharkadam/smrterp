@@ -11,6 +11,7 @@ from frappe import _
 from erpnext.stock.utils import get_incoming_rate
 from erpnext.stock.stock_ledger import get_previous_sle
 from erpnext.controllers.queries import get_match_cond
+from erpnext.stock.get_item_details import get_available_qty
 
 class NotUpdateStockError(frappe.ValidationError): pass
 class StockOverReturnError(frappe.ValidationError): pass
@@ -19,8 +20,17 @@ class DuplicateEntryForProductionOrderError(frappe.ValidationError): pass
 
 from erpnext.controllers.stock_controller import StockController
 
+form_grid_templates = {
+	"mtn_details": "templates/form_grid/stock_entry_grid.html"
+}
+
 class StockEntry(StockController):
 	fname = 'mtn_details'
+	def onload(self):
+		if self.docstatus==1:
+			for item in self.get(self.fname):
+				item.update(get_available_qty(item.item_code,
+					item.s_warehouse))
 
 	def validate(self):
 		self.validate_posting_time()
@@ -55,7 +65,7 @@ class StockEntry(StockController):
 	def on_cancel(self):
 		self.update_stock_ledger()
 		self.update_production_order()
-		self.make_cancel_gl_entries()
+		self.make_gl_entries_on_cancel()
 
 	def validate_fiscal_year(self):
 		from erpnext.accounts.utils import validate_fiscal_year
@@ -317,7 +327,10 @@ class StockEntry(StockController):
 						frappe.DoesNotExistError)
 
 				# validate quantity <= ref item's qty - qty already returned
-				ref_item_qty = sum([flt(d.qty) for d in ref.doc.get({"item_code": item.item_code})])
+				if self.purpose == "Purchase Return":
+					ref_item_qty = sum([flt(d.qty)*flt(d.conversion_factor) for d in ref.doc.get({"item_code": item.item_code})])
+				elif self.purpose == "Sales Return":
+					ref_item_qty = sum([flt(d.qty) for d in ref.doc.get({"item_code": item.item_code})])
 				returnable_qty = ref_item_qty - flt(already_returned_item_qty.get(item.item_code))
 				if not returnable_qty:
 					frappe.throw(_("Item {0} has already been returned").format(item.item_code), StockOverReturnError)

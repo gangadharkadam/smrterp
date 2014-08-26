@@ -12,6 +12,10 @@ from frappe.model.mapper import get_mapped_doc
 from erpnext.stock.utils import update_bin
 from erpnext.controllers.selling_controller import SellingController
 
+form_grid_templates = {
+	"delivery_note_details": "templates/form_grid/item_grid.html"
+}
+
 class DeliveryNote(SellingController):
 	tname = 'Delivery Note Item'
 	fname = 'delivery_note_details'
@@ -192,7 +196,7 @@ class DeliveryNote(SellingController):
 		frappe.db.set(self, 'status', 'Cancelled')
 		self.cancel_packing_slips()
 
-		self.make_cancel_gl_entries()
+		self.make_gl_entries_on_cancel()
 
 	def validate_packed_qty(self):
 		"""

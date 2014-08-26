@@ -1,6 +1,5 @@
 {
- "allow_attach": 1, 
- "allow_import": 1, 
+  "allow_import": 1, 
  "autoname": "naming_series:", 
  "creation": "2013-05-21 16:16:39", 
  "docstatus": 0, 
@@ -444,6 +443,11 @@
    "read_only": 1
   }, 
   {
+   "fieldname": "fold", 
+   "fieldtype": "Fold", 
+   "permlevel": 0
+  }, 
+  {
    "fieldname": "terms_section_break", 
    "fieldtype": "Section Break", 
    "label": "Terms and Conditions", 
@@ -645,7 +649,7 @@
  "icon": "icon-file-text", 
  "idx": 1, 
  "is_submittable": 1, 
- "modified": "2014-07-31 04:59:24.561351", 
+ "modified": "2014-08-12 05:22:53.496614", 
  "modified_by": "Administrator", 
  "module": "Buying", 
  "name": "Purchase Order", 

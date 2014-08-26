@@ -16,7 +16,6 @@ class Account(Document):
 		if not frozen_accounts_modifier or frozen_accounts_modifier in frappe.user.get_roles():
 			self.get("__onload").can_freeze_account = True
 
-
 	def autoname(self):
 		self.name = self.account_name.strip() + ' - ' + \
 			frappe.db.get_value("Company", self.company, "abbr")
@@ -166,7 +165,7 @@ class Account(Document):
 		# If outstanding greater than credit limit and not authorized person raise exception
 		if credit_limit > 0 and flt(total_outstanding) > credit_limit \
 				and not self.get_authorized_user():
-			throw(_("{0} Credit limit {0} crossed").format(_(credit_limit_from), credit_limit))
+			throw(_("{0} Credit limit {1} crossed").format(_(credit_limit_from), credit_limit))
 
 	def validate_due_date(self, posting_date, due_date):
 		credit_days = (self.credit_days or frappe.db.get_value("Company", self.company, "credit_days"))

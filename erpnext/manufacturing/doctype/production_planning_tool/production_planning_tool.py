@@ -122,7 +122,7 @@ class ProductionPlanningTool(Document):
 		if self.fg_item:
 			item_condition = ' and pi.item_code = "' + self.fg_item + '"'
 
-		packed_items = frappe.db.sql("""select distinct pi.parent, pi.item_code, pi.warehouse as reserved_warhouse,
+		packed_items = frappe.db.sql("""select distinct pi.parent, pi.item_code, pi.warehouse as warehouse,
 			(((so_item.qty - ifnull(so_item.delivered_qty, 0)) * pi.qty) / so_item.qty)
 				as pending_qty
 			from `tabSales Order Item` so_item, `tabPacked Item` pi
@@ -276,7 +276,7 @@ class ProductionPlanningTool(Document):
 					item_list.append([item, flt(item_details.qty) * so_qty[1], item_details.description,
 						item_details.stock_uom, item_details.min_order_qty, so_qty[0]])
 
-			self.make_items_dict(item_list)
+		self.make_items_dict(item_list)
 
 	def make_items_dict(self, item_list):
 		for i in item_list:
@@ -324,7 +324,7 @@ class ProductionPlanningTool(Document):
 			total_qty = sum([flt(d[0]) for d in so_item_qty])
 			if total_qty > item_projected_qty.get(item, 0):
 				# shortage
-				requested_qty = total_qty - item_projected_qty.get(item, 0)
+				requested_qty = total_qty - flt(item_projected_qty.get(item))
 				# consider minimum order qty
 				requested_qty = requested_qty > flt(so_item_qty[0][3]) and \
 					requested_qty or flt(so_item_qty[0][3])
@@ -354,8 +354,8 @@ class ProductionPlanningTool(Document):
 	def get_projected_qty(self):
 		items = self.item_dict.keys()
 		item_projected_qty = frappe.db.sql("""select item_code, sum(projected_qty)
-			from `tabBin` where item_code in (%s) group by item_code""" %
-			(", ".join(["%s"]*len(items)),), tuple(items))
+			from `tabBin` where item_code in (%s) and warehouse=%s group by item_code""" %
+			(", ".join(["%s"]*len(items)), '%s'), tuple(items + [self.purchase_request_for_warehouse]))
 
 		return dict(item_projected_qty)
 

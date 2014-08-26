@@ -18,12 +18,10 @@ class SMSCenter(Document):
 			where_clause = self.customer and " and customer = '%s'" % \
 				self.customer.replace("'", "\'") or " and ifnull(customer, '') != ''"
 		if self.send_to == 'All Supplier Contact':
-			where_clause = self.supplier and \
-				" and ifnull(is_supplier, 0) = 1 and supplier = '%s'" % \
+			where_clause = self.supplier and " and supplier = '%s'" % \
 				self.supplier.replace("'", "\'") or " and ifnull(supplier, '') != ''"
 		if self.send_to == 'All Sales Partner Contact':
-			where_clause = self.sales_partner and \
-				" and ifnull(is_sales_partner, 0) = 1 and sales_partner = '%s'" % \
+			where_clause = self.sales_partner and " and sales_partner = '%s'" % \
 				self.sales_partner.replace("'", "\'") or " and ifnull(sales_partner, '') != ''"
 
 		if self.send_to in ['All Contact', 'All Customer Contact', 'All Supplier Contact', 'All Sales Partner Contact']:
@@ -53,7 +51,7 @@ class SMSCenter(Document):
 
 		for d in rec:
 			rec_list += d[0] + ' - ' + d[1] + '\n'
-			self.receiver_list = rec_list
+		self.receiver_list = rec_list
 
 	def get_receiver_nos(self):
 		receiver_nos = []

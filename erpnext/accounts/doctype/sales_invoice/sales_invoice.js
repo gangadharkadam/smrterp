@@ -73,12 +73,14 @@ erpnext.accounts.SalesInvoiceController = erpnext.selling.SellingController.exte
 						return item.delivery_note ? true : false;
 					});
 
-				if(!from_delivery_note)
-					cur_frm.appframe.add_primary_action(__('Make Delivery'), cur_frm.cscript['Make Delivery Note'])
+				if(!from_delivery_note) {
+					cur_frm.appframe.add_primary_action(__('Make Delivery'), cur_frm.cscript['Make Delivery Note'], "icon-truck")
+				}
 			}
 
-			if(doc.outstanding_amount!=0)
-				cur_frm.appframe.add_primary_action(__('Make Payment Entry'), cur_frm.cscript.make_bank_voucher);
+			if(doc.outstanding_amount!=0) {
+				cur_frm.appframe.add_primary_action(__('Make Payment Entry'), cur_frm.cscript.make_bank_voucher, "icon-money");
+			}
 		}
 
 		// Show buttons only when pos view is active
@@ -102,7 +104,7 @@ erpnext.accounts.SalesInvoiceController = erpnext.selling.SellingController.exte
 						company: cur_frm.doc.company
 					}
 				})
-			});
+			}, "icon-download", "btn-default");
 	},
 
 	delivery_note_btn: function() {
@@ -122,7 +124,7 @@ erpnext.accounts.SalesInvoiceController = erpnext.selling.SellingController.exte
 						};
 					}
 				});
-			});
+			}, "icon-download", "btn-default");
 	},
 
 	tc_name: function() {
