@@ -11,6 +11,7 @@ from erpnext.controllers.stock_controller import StockController
 
 class SellingController(StockController):
 	def __setup__(self):
+		frappe.errprint("In the selling Controller")
 		if hasattr(self, "fname"):
 			self.table_print_templates = {
 				self.fname: "templates/print_formats/includes/item_grid.html",

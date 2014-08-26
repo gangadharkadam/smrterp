@@ -8,7 +8,11 @@ from erpnext.utilities.transaction_base import TransactionBase
 from frappe.utils import now, extract_email_id
 import json
 import requests
+
 from frappe.utils import get_url
+
+
+STANDARD_USERS = ("Guest", "Administrator")
 
 class SupportTicket(TransactionBase):
 
@@ -37,7 +41,24 @@ class SupportTicket(TransactionBase):
 		test['communications'] = []
 		self.call_del_keys(support_ticket.get('communications'), test)
 		
-		self.tenent_based_ticket_creation(support_ticket)
+		# self.tenent_based_ticket_creation(support_ticket)
+		"""for sending email"""
+		frappe.errprint(self.flag)
+		if self.flag=='False':
+			frappe.errprint("in if")
+
+			from frappe.utils.user import get_user_fullname
+
+			# email=frappe.db.sql("""select email_id from `tabAddress` where customer='%s'"""%(self.customer),as_list=1)
+			# frappe.errprint(email[0][0])
+
+
+			message = frappe.db.sql_list("""select message from `tabTemplate Types`
+			where event_type='New Support Ticket'""")
+			sender = sender = frappe.session.user not in STANDARD_USERS and frappe.session.user or None
+			frappe.sendmail(recipients=self.raised_by, sender=sender, subject=self.subject,
+				message=message[0].format(self.customer,self.subject,self.name))
+			frappe.db.sql("""Update `tabSupport Ticket` set Flag='True' where name='%s'"""%(self.name))
 
 	def login(self):
 		login_details = {'usr': 'Administrator', 'pwd': 'admin'}
